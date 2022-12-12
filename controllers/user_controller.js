@@ -1,6 +1,23 @@
 const User = require('../models/user');
-module.exports.profile = function (req, res) {
-     res.end('<h1>User Profile .. </h1>')
+
+module.exports.profile = function(req, res){
+    if (req.cookies.user_id){
+        User.findById(req.cookies.user_id, function(err, user){
+            if (user){
+                return res.render('home_view', {
+                    title: "User Profile",
+                    user: user
+                })
+            }else{
+                return res.redirect('/users/sign-in');
+
+            }
+        });
+    }else{
+        return res.redirect('/users/sign-in');
+
+    }
+ 
 }
 
 //render sign in page
@@ -17,25 +34,6 @@ module.exports.signUp = function (req, res) {
     })
 }
 
-//get the sign up data
-/*module.exports.create = function (req, res) {
-    if (req.body.password != req.body.confirm_password) {
-        return res.redirect('back');
-    }
-
-    User.findOne({ email: req.body.email }, function (err, user) {
-        if (err) { console.log('error in find user during signUp'); return }
-
-        if (!user) {
-            User.create(req.body, function (err, user) {
-                if (err) { console.log('Error in creating user while signUp'); return; }
-
-                return req.redirect('user/user-signIn');
-            });
-        } else {
-            return req.redirect('back');
-        }
-    });*/
 // get the sign up data
 module.exports.create = function (req, res) {
     console.log(req.body);
@@ -60,6 +58,31 @@ module.exports.create = function (req, res) {
 
 }
 
+// sign in and create a session for the user
+module.exports.createSession = function(req, res){
+
+    // steps to authenticate
+    // find the user
+    User.findOne({email: req.body.email}, function(err, user){
+        if(err){console.log('error in finding user in signing in'); return}
+        // handle user found
+        if (user){
+
+            // handle password which doesn't match
+            if (user.password != req.body.password){
+                return res.redirect('back');
+            }
+
+            // handle session creation
+            res.cookie('user_id', user.id);
+            return res.redirect('/user/profile');
+
+        }else{
+            // handle user not found
+
+            return res.redirect('back');
+        }
 
 
-
+    })
+}

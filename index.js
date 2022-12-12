@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const port = 8000;
 const db = require('./config/mongoose');
+//used for session cookies
+const session=require('express-session');
 const cookie = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
