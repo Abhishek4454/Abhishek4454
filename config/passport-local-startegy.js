@@ -1,5 +1,5 @@
 const passport= require('passport');
-const localStartegy=require('passport-local');
+const localStartegy=require('passport-local').Strategy;
 
 const User= require('../models/user');
 
@@ -33,7 +33,7 @@ passport.serializeUser(function(user,done){
 });
 
 //deserializing the cookies from the keys in the cookies
-passport.deserializeUser(function(id,user){
+passport.deserializeUser(function(id,done){
     User.findById(id,function(err,user){
         if(err){
             console.log('Eror in finding user--->passport');
