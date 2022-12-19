@@ -10,8 +10,7 @@ router.get('/', homeController.home);
 router.use('/user', require('./user'));
 
 router.use('/render', require('./render'));
-
-
+router.use('/post',require('./post'));
 
 module.exports = router;
 

@@ -1,28 +1,35 @@
 const { response } = require('express');
 const User = require('../models/user');
-
 module.exports.profile = function(req, res){
-    if (req.cookies.user_id){
-        User.findById(req.cookies.user_id, function(err, user){
-            if (user){
-                return res.render('home_view', {
-                    title: "User Profile",
-                    user: user
-                })
-            }else{
-                return res.redirect('/users/sign-in');
-
-            }
-        });
-    }else{
-        return res.redirect('/users/sign-in');
-
-    }
- 
+    return res.render('home_view', {
+        title: 'User Profile'
+    })
 }
+// module.exports.profile = function(req, res){
+//     if (req.cookies.user_id){
+//         User.findById(req.cookies.user_id, function(err, user){
+//             if (user){
+//                 return res.render('home_view', {
+//                     title: "User Profile",
+//                     user: user
+//                 })
+//             }else{
+//                 return res.redirect('/user/sign-in');
+
+//             }
+//         });
+//     }else{
+//         return res.redirect('/user/sign-in');
+
+//     }
+ 
+// }
 
 //render sign in page
 module.exports.signIn = function (req, res) {
+    if(req.isAuthenticated()){
+        return res.redirect('/user/profile');
+    }
     return res.render('user_sign_in', {
         title:"Codeil|user_sign_in"
     })
@@ -30,6 +37,9 @@ module.exports.signIn = function (req, res) {
 
 //render sign up page
 module.exports.signUp = function (req, res) {
+    if(req.isAuthenticated()){
+        return res.redirect('/user/profile');
+    }
     return res.render('user_sign_up', {
         title: "Codeil|user_sign_up"
     })
@@ -61,5 +71,12 @@ module.exports.create = function (req, res) {
 
 // sign in and create a session for the user
 module.exports.createSession = function(req, res){
-    return response('/');
+    return res.redirect('/');
 }
+
+// sign out and destroy a session for the user
+module.exports.destroySession = function(req, res){
+   req.logout();
+   return  res.redirect('/');
+}
+
