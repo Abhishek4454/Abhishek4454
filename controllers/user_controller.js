@@ -1,7 +1,7 @@
 const { response } = require('express');
 const User = require('../models/user');
 module.exports.profile = function(req, res){
-    return res.render('home_view', {
+    return res.render('user_profile', {
         title: 'User Profile'
     })
 }
