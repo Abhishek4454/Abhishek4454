@@ -1,29 +1,15 @@
 const { response } = require('express');
 const User = require('../models/user');
+
 module.exports.profile = function(req, res){
-    return res.render('user_profile', {
-        title: 'User Profile'
-    })
+    User.findById(req.params.id, function(err, user){
+        return res.render('home_view', {
+            title: 'User Profile',
+            profile_user: user
+        });
+    });
+
 }
-// module.exports.profile = function(req, res){
-//     if (req.cookies.user_id){
-//         User.findById(req.cookies.user_id, function(err, user){
-//             if (user){
-//                 return res.render('home_view', {
-//                     title: "User Profile",
-//                     user: user
-//                 })
-//             }else{
-//                 return res.redirect('/user/sign-in');
-
-//             }
-//         });
-//     }else{
-//         return res.redirect('/user/sign-in');
-
-//     }
- 
-// }
 
 //render sign in page
 module.exports.signIn = function (req, res) {

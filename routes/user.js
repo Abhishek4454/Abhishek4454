@@ -7,7 +7,7 @@ console.log('User routes loaded : ');
 
 const userController = require('../controllers/user_controller');
 
-router.get('/profile',passport.checkAuthentication, userController.profile);
+router.get('/profile/:id', passport.checkAuthentication, userController.profile);
 
 router.get('/user-signIn', userController.signIn);
 router.get('/user-signUp', userController.signUp);
