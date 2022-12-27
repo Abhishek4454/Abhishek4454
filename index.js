@@ -6,6 +6,8 @@ const db = require('./config/mongoose');
 const passport=require('passport');
 const passportLocal=require('./config/passport-local-startegy');
 const flash= require('connect-flash');
+const customMware= require('./config/middleware');
+
 
 
 //used for session cookies
@@ -70,6 +72,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
 app.use(flash());
+app.use(customMware.setFlash);
 app.use('/', require('./routes'));
 
 
