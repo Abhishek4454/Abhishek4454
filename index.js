@@ -5,6 +5,7 @@ const db = require('./config/mongoose');
 
 const passport=require('passport');
 const passportLocal=require('./config/passport-local-startegy');
+const flash= require('connect-flash');
 
 
 //used for session cookies
@@ -58,7 +59,8 @@ app.set('layout extractScripts', true);
 
 
 app.use(expressLayout);
-app.use(bodyParser.urlencoded({ extended:false }));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended:true }));
 app.use(express.static('./assests'));
 
 app.use(cookieParser());
@@ -67,7 +69,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
-
+app.use(flash());
 app.use('/', require('./routes'));
 
 
