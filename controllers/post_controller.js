@@ -26,17 +26,37 @@ module.exports.create = async function(req, res){
    
 }
 
-module.exports.destroy=function(req,res){
-    Post.findById(req.params.id,function(err,post){
+module.exports.destroy= async function(req,res){
+    
+    try {
+        let post=await Post.findById(req.params.id);
         if(post.user=req.user.id){
             post.remove();
 
-            Comment.deleteMany({post:req.params.id},function(err){
-                return res.redirect('back');
-            });
+            await Comment.deleteMany({post:req.params.id});
+            
+            if(req.xhr){
+                return res.status(200).json({
+                    data:{
+                        post_id:req.params.id
+
+                    },
+                    message:"Posts deleted successfully !"
+                });
+            }
+
+            req.flash('success','Posts and associated comments deleted !');
+            return res.redirect('back');
+           
         }else{
+            req.flash('error','You cannot delete this Posts !');
+
             return res.redirect('back');
         }
-    })
+    } catch (error) {
+        req.flash('error',error);
+        return res.redirect('back');
+    }
+    
 }
 

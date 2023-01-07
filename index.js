@@ -59,8 +59,10 @@ app.use(session({
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 
-
 app.use(expressLayout);
+//make uploads available for use
+app.use('/uploads',express.static(__dirname+'/uploads'));
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(express.static('./assests'));

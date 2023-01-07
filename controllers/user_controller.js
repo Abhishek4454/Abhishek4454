@@ -1,5 +1,7 @@
 const { response } = require('express');
 const User = require('../models/user');
+const fs= require('fs');
+const path= require('path');
 
 module.exports.profile = function (req, res) {
     User.findById(req.params.id, function (err, user) {
@@ -70,17 +72,38 @@ module.exports.destroySession = function (req, res) {
     
 }
 
-module.exports.update = function (req, res) {
-    console.log(req.params.id);
-    console.log(req.user);
-    console.log(req.body);
+module.exports.update = async function (req, res) {
+    
+    // if (req.user.id == req.params.id) {
+    //     User.findByIdAndUpdate({ _id: req.params.id }, { $set: { name: req.body.name, email: req.body.email }},{ new: true}
+    //         , function (err, user) {
+    //     console.log(user);
+    //     return res.redirect('back');
+    // });
     if (req.user.id == req.params.id) {
-        User.findByIdAndUpdate({ _id: req.params.id }, { $set: { name: req.body.name, email: req.body.email }},{ new: true}
+        try {
+            let user=await User.findById(req.params.id);
+            User.uploadedAvatar(req,res,function(err){
+                if(err){console.log('*********MulterError****',err)}
+                   user.name=req.body.name;
+                    user.email=req.body.email;
+                if(req.file){
 
-            , function (err, user) {
-        console.log(user);
-        return res.redirect('back');
-    });
+                    if(user.avatar){
+                        fs.unlinkSync(path.join(__dirname,'..',user.avatar));
+                    }
+
+                    // this is saving the path of the uploaded file into the avatar field of the user
+                    user.avatar=User.avatarPath +"/"+ req.file.filename;
+                }
+                user.save;
+                return res.redirect('back');
+
+            });
+        } catch (error) {
+            req.flash('error',error);
+            return res.redirect('back');
+        }
 } else {
     return res.status(401).send('Unauthorized');
 }
