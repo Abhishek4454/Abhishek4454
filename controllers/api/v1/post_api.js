@@ -19,27 +19,21 @@ module.exports.index=async function(req,res){
 }
 
 module.exports.destroy= async function(req,res){
-    
     try {
         let post=await Post.findById(req.params.id);
         
             post.remove();
-            if(req.xhr){
-                return res.status(200).json({
-                    data:{
-                        post:post
-                    },
-                    message:'post created! '
-                })
-            }
+           
             await Comment.deleteMany({post:req.params.id});
             
-            return res.redirect('back');
+            return res.json(200,{
+                message:"Post and associated comments deleted successfuly !"
+            });
            
-       
     } catch (error) {
-       
-        return res.redirect('back');
+        return res.json(500,{
+            message:"Internal Server error"
+        });
     }
     
 }
