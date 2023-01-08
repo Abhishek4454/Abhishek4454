@@ -13,7 +13,7 @@ router.use('/render', require('./render'));
 router.use('/post',require('./post'));
 router.use('/comment',require('./comments'));
 
-router.use('/api',require('../'));
+router.use('/api',require('./api'));
 
 
 
