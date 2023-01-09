@@ -5,6 +5,8 @@ const db = require('./config/mongoose');
 
 const passport=require('passport');
 const passportLocal=require('./config/passport-local-startegy');
+const passportJwtStrategy=require('./config/passport-jwt-strategy');
+
 const flash= require('connect-flash');
 const customMware= require('./config/middleware');
 
