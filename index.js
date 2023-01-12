@@ -14,13 +14,14 @@ const customMware= require('./config/middleware');
 
 //used for session cookies
 const session=require('express-session');
-
+const passportStrategy=require('./config/passport-google-oauth2-strategy');
 const cookie = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressLayout = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const { Mongoose, default: mongoose } = require('mongoose');
 const mongoStore=require('connect-mongo');
+
 
 const sassMidleware=require('node-sass-middleware');
 app.use(sassMidleware({
